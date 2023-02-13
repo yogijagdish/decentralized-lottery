@@ -2,6 +2,6 @@ from brownie import accounts,config,networks
 
 def get_account():
     if networks.show_active == "development":
-        account = accounts[0]
+        return accounts[0]
     else:
-        account = 
+        return accounts.add(config["wallets"]["from_key"])

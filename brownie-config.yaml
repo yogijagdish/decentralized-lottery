@@ -1,12 +1,20 @@
 dependencies:
-  -smartcontractkit/chianlink-brownie-contracts@0.2.1
+  - smartcontractkit/chianlink-brownie-contracts@0.2.1
 
 compiler:
-  -solc:
+  solc:
     remappings:
-      -@chainlink=smartcontractkit/chianlink-brownie-contracts@0.2.1'
+      - '@chainlink=smartcontractkit/chianlink-brownie-contracts@0.2.1'
 
-  networks:
-    goerli:
-      eth_usd_conversion: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e
-'
+dotenv: .env
+
+
+networks:
+  goerli:
+    eth_usd_conversion: '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e'
+
+wallets:
+  from_key: ${PRIVATE_KEY}
+
+
+
