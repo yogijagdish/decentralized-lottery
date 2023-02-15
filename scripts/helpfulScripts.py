@@ -4,7 +4,11 @@ from web3 import Web3
 DECIMAL = 18
 INITIAL_ANSWER = 2000
 
-def get_account():
+def get_account(id=None,index=None):
+    if index:
+        return accounts[index]
+    if id:
+        return accounts.load(id)
     if network.show_active == "development":
         return accounts[0]
     else:
