@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Lottery is Ownable {
 
     address payable[] public players;
-    uint256 entranceRate = 50 * 10 ** 18;
+    uint256 entranceRate;
     AggregatorV3Interface public ethUSDPriceFeed;
     uint256 randomNumber;
     address payable public winner;
@@ -23,11 +23,24 @@ contract Lottery is Ownable {
 
     constructor (address _priceFeed) public {
         lotteryState = LotteryState.CLOSED;
+        entranceRate = 50 * 10 ** 18;
         ethUSDPriceFeed = AggregatorV3Interface(_priceFeed);
+        lotteryState = LotteryState.CLOSED;
+    }
+    function startLottery() public onlyOwner{
+        require(lotteryState == LotteryState.CLOSED,"cannot start new lottery yet!!!");
+        lotteryState = LotteryState.OPEN;
+    }
+    function entranceFee() public view returns(uint256){
+        (,int256 answer,,,) = ethUSDPriceFeed.latestRoundData();
+        uint256 adjustedPrice = uint256(answer) * 10**10;
+        uint256 entrancePrice = (entranceRate* 10**18)/adjustedPrice;
+        return uint256(answer);
+        
     }
     function Enter() public payable {
         require(lotteryState == LotteryState.OPEN);
-        require(msg.value > entranceFee(),"sorry not enough fees");
+        require(msg.value >= entranceFee(),"sorry not enough fees");
         players.push(payable(msg.sender));
     }
     function endLottery() public onlyOwner{
@@ -43,16 +56,5 @@ contract Lottery is Ownable {
         winner = players[randomNumber];
         winner.transfer(address(this).balance);
         players = new address payable[](0);
-    }
-    function entranceFee() public view returns(uint256){
-        (,int256 answer,,,) = ethUSDPriceFeed.latestRoundData();
-        uint256 adjustedPrice = uint256(answer) * 10 ** 10;
-        uint256 entrancePrice = (50*10**18)/adjustedPrice;
-        return entrancePrice;
-        
-    }
-    function startLottery() public onlyOwner{
-        require(lotteryState == LotteryState.CLOSED,"cannot start new lottery yet!!!");
-        lotteryState = LotteryState.OPEN;
     }
 }

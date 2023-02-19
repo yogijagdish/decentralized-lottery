@@ -1,17 +1,37 @@
-from brownie import Lottery,network,config
+from brownie import Lottery
 
-from scripts.helpfulScripts import get_account,deploy_mocks
+from scripts.helpfulScripts import get_account,get_contract
 
 def deploy_lottery():
 
     account = get_account()
+    contract = get_contract()
 
-    if network.show_active() == "development":
-        priceFeedAddress = deploy_mocks()
-    else:
-        priceFeedAddress = config["networks"][network.show_active()]["eth_usd_conversion"]
-    lottery = Lottery.deploy(priceFeedAddress,{"from":account})
+    lottery = Lottery.deploy(contract,{"from":account})
     print(f"Contracts deployed to ${lottery.address}")
+
+
+def deploy_start_lottery():
+
+    lottery = Lottery[-1]
+    tx_wait = lottery.startLottery({"from": get_account()})
+    tx_wait.wait(1)
+    print("Lottery has started")
+
+def deploy_enter():
+    lottery = Lottery[-1]
+    value = lottery.entranceFee() + 1000
+    tx_wait = lottery.Enter({"from":get_account(),"value": value})
+    tx_wait.wait(1)
+    print("you have entered for the lottery")
+
+def deploy_get_rates():
+    lottery = Lottery[-1]
+    value = lottery.entranceFee() + 1000
+    print(value)
 
 def main():
     deploy_lottery()
+    deploy_start_lottery()
+    deploy_get_rates()
+    # deploy_enter()
