@@ -33,9 +33,8 @@ contract Lottery is Ownable {
     }
     function entranceFee() public view returns(uint256){
         (,int256 answer,,,) = ethUSDPriceFeed.latestRoundData();
-        uint256 adjustedPrice = uint256(answer) * 10**10;
-        uint256 entrancePrice = (entranceRate* 10**18)/adjustedPrice;
-        return uint256(answer);
+        uint256 entrancePrice = entranceRate*1000/uint256(answer);
+        return entrancePrice;
         
     }
     function Enter() public payable {

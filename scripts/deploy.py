@@ -20,18 +20,19 @@ def deploy_start_lottery():
 
 def deploy_enter():
     lottery = Lottery[-1]
-    value = lottery.entranceFee() + 1000
-    tx_wait = lottery.Enter({"from":get_account(),"value": value})
+    value = lottery.entranceFee()
+    print(value)
+    tx_wait = lottery.Enter({"from":get_account(),"value": 26})
     tx_wait.wait(1)
     print("you have entered for the lottery")
 
 def deploy_get_rates():
     lottery = Lottery[-1]
-    value = lottery.entranceFee() + 1000
+    value = lottery.entranceFee()
     print(value)
 
 def main():
     deploy_lottery()
     deploy_start_lottery()
     deploy_get_rates()
-    # deploy_enter()
+    deploy_enter() 
