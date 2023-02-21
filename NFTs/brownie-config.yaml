@@ -10,7 +10,7 @@ compiler:
 dotenv: .env
 
 wallets:
-  from_key = ${PRIVATE_KEY}
+  from_key: ${PRIVATE_KEY}
 
 networks:
   default: development
