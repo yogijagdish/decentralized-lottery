@@ -9,7 +9,8 @@ def deploy_simpleCollectable():
     simple_collectable = SimpleCollectible.deploy({"from":account})
     tx = simple_collectable.publicCollectible(sample_token_uri,{"from": account})
     tx.wait(1)
-    print(f"deployed!!! you can view your NFT at {OPENSEA_URL.format(simple_collectable.address,simple_collectable.tokkenCollector()-1)}")
+    print(f"deployed!!! you can view your NFT at {OPENSEA_URL.format(simple_collectable.address,simple_collectable.tokenCollector()-1)}")
+    return simple_collectable
 
 def main():
     deploy_simpleCollectable()
